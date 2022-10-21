@@ -74,24 +74,24 @@ void setup()
   g_log.write(Log::Debug, "MAIN: Found Airthings " + String(g_ble.getScanner()->size()) + " devices.");
 
   // Initialize Airthings devices.
-  if (g_airthings.Count() == 0 && g_ble.getScanner()->foundDevice())
+  if (g_ble.getScanner()->foundDevice())
   {
-    for (size_t i = 0; i < g_ble.getScanner()->size(); i++)
+    for (auto i=0; i<g_ble.getScanner()->size(); i++)
     {
       g_log.write(Log::Debug, "MAIN: device serial: " + String(Airthings::parseSerial(g_ble.getScanner()->getDevices()[i]->getManufacturerData())));
-
       switch (Airthings::parseModelNumber(g_ble.getScanner()->getDevices()[i]->getManufacturerData()))
       {
         case 2930:
           g_airthings.Add(new WavePlus(*g_ble.getScanner()->getDevices()[i]));
+          g_airthings.Last()->begin();
           break;
         case 2920:
           g_airthings.Add(new WaveMini(*g_ble.getScanner()->getDevices()[i]));
+          g_airthings.Last()->begin();
           break;
         default:
           g_log.write(Log::Error, "MAIN: Invalid device found!");
       }
-      g_airthings.Last()->begin();
     }
   }
 }
@@ -106,7 +106,7 @@ void loop()
   if (!g_ota.busy())
   {
     g_mqtt.loop();
-    for (int i = 0; i < g_airthings.Count(); i++)
+    for (auto i=0; i<g_airthings.Count(); i++)
     {
       g_airthings[i]->loop();
     }

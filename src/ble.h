@@ -2,33 +2,23 @@
 #define ble_h
 
 #include <Arduino.h>
-// #include <BLEDevice.h>
 #include <NimBLEDevice.h>
 #include "log.h"
 #include "ListLib.h"
 
-const static BLEUUID k_serviceUUID("b42e1c08-ade7-11e4-89d3-123b93f75cba");
 #define MAX_BLE_CLIENTS 50
 #define BLE_SCAN_PERIOD 5
 
-// The bluetooth stack takes a callback when scannign for devices.  The first Airthings device it finds it will record in pServerAddress.
+// The bluetooth stack takes a callback when scanning for devices.
 class FoundDeviceCallback : public BLEAdvertisedDeviceCallbacks
 {
 public:
    /**
-    * Return the BLE client.
+    * Return true if new devices found.
     * @param[out] BLEClient.
     */
-   bool foundDevice()
-   {
-      if (m_foundDevice)
-      {
-         m_foundDevice = false;
-         return true;
-      }
-      else
-         return false;
-   }
+   bool foundDevice();
+
    /**
     * Return ble devices that was found.
     * @param[out] BLEAdvertisedDevice.
@@ -37,6 +27,7 @@ public:
    {
       return m_devices;
    }
+
    /**
     * Return the number of ble devices found
     * @param[out] size_t.
@@ -45,6 +36,7 @@ public:
    {
       return m_count;
    }
+
    /**
     * Add a service id to search.
     * @param[out] BLEClient.
@@ -78,7 +70,8 @@ public:
    void begin();
 
    /**
-    * Search for BLE devices
+    * Search for BLE devices and return the results.
+    * @param[out] BLEScanResults.
     */
    BLEScanResults search();
 
@@ -97,7 +90,6 @@ private:
    BLEClient *m_bleClient;
    FoundDeviceCallback *m_btCallback;
    BLEScan *m_pBLEScan;
-
 };
 
 extern BLE g_ble;

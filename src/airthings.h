@@ -41,13 +41,6 @@ public:
      * @return uint32_t
      */
     static long parseModelNumber(std::string manuData);
-    /**
-     * @brief Get service ID to access device data
-     *
-     * @return BLEUUID
-     */
-    // static virtual BLEUUID getServiceID() = 0;
-
 protected:
     /**
      * @brief Publish json to MQTT with all the data

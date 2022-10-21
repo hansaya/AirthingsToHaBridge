@@ -30,6 +30,17 @@ void FoundDeviceCallback::onResult(NimBLEAdvertisedDevice *advertisedDevice)
    }
 }
 
+bool FoundDeviceCallback::foundDevice()
+{
+   if (m_foundDevice)
+   {
+      m_foundDevice = false;
+      return true;
+   }
+   else
+      return false;
+}
+
 void BLE::begin()
 {
    BLEDevice::init("AirthingsScan");
